@@ -1,4 +1,4 @@
-PYTHON := python
+PYTHON := python2
 
 .SUFFIXES:
 .SUFFIXES: .asm .tx .o .gbc .png .2bpp .1bpp .lz .pal .bin .blk .tilemap
@@ -57,11 +57,11 @@ $(all_obj): $$*.tx $$(patsubst %.asm, %.tx, $$($$*_dep))
 	@$(gfx) 2bpp $(2bppq); $(eval 2bppq :=)
 	@$(gfx) 1bpp $(1bppq); $(eval 1bppq :=)
 	@$(gfx) lz $(lzq);     $(eval lzq   :=)
-	rgbasm -o $@ $*.tx
+	rgbds/rgbasm -o $@ $*.tx
 
 pokecrystal.gbc: $(crystal_obj)
-	rgblink -n $*.sym -m $*.map -o $@ $^
-	rgbfix -Cjv -i BYTE -k 01 -l 0x33 -m 0x10 -p 0 -r 3 -t PM_CRYSTAL $@
+	rgbds/rgblink -n $*.sym -m $*.map -o $@ $^
+	rgbds/rgbfix -Cjv -i BYTE -k 01 -l 0x33 -m 0x10 -p 0 -r 3 -t PM_CRYSTAL $@
 
 compare: pokecrystal.gbc
 	cmp baserom.gbc pokecrystal.gbc
